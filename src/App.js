@@ -1,25 +1,20 @@
-import { useState } from "react";
 import "./App.css";
+import Card from "./components/Card";
 
 function App() {
-  const [counter, setCounter] = useState(15);
-
-  const addValue = () => {
-    setCounter(counter+1)
-  };
-  const recreaseValue=()=>{
-    setCounter(counter-1)
+  const user={
+    name:'kodewithdky',
+    channel:'kodewithdky',
+    location:'Lucknow'
   }
   return (
-    <div style={{ textAlign: "center", marginTop: "20px" }}>
-      <h1>kodewithdky</h1>
-      <h3>Counter Value: {counter}</h3>
-
-      <br />
-      <button onClick={addValue}>Add Value</button>
-      <br />
-      <button onClick={recreaseValue}>Decrease Value</button>
-    </div>
+    <>
+     <div className="relative bg-green-500 p-2 inline-block rounded-md left-[43%] top-[5vh]">
+      <h1 className="text-2xl">Tailwind Test</h1>
+     </div>
+     <Card username="kodewithdky" btnText="click me"/>
+     <Card username="DK. YaDav" btnText="View"/>
+    </>
   );
 }
 
