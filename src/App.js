@@ -1,12 +1,12 @@
 import "./App.css";
-import Footer from "./components/footer/Footer";
-import Home from "./components/home/Home";
-import NavBar from "./components/navbar/NavBar";
+import Login from "./components/Login";
+import Profile from "./components/Profile";
 
 function App() {
   return (
     <>
-     <h1>app</h1>
+      <Login />
+      <Profile />
     </>
   );
 }
