@@ -1,37 +1,68 @@
 import { useEffect, useState } from "react";
 import "./App.css";
-import ThemBtn from "./components/ThemBtn";
-import Card from "./components/Card";
-import { ThemeProvider } from "./context/theme";
-
+import { TodoProvider } from "./context";
+import { TodoForm, TodoItem } from "./components";
 function App() {
-  const [themeMode, setThemeMode] = useState("light");
+  const [todos, setTodos] = useState([]);
 
-  const lightTheme = () => {
-    setThemeMode("light");
+  const addTodo = (todo) => {
+    setTodos((prev) => [{ id: Date.now(), ...todo }, ...prev]);
   };
-  const darkTheme = () => {
-    setThemeMode("dark");
+  const updateTodo = (id, todo) => {
+    setTodos((prev) =>
+      prev.map((preTodo) => (preTodo.id === id ? todo : preTodo))
+    );
+  };
+  const deleteTodo = (id) => {
+    setTodos((prev) => prev.filter((todo) => todo.id !== id));
+  };
+  const toggleComplete = (id) => {
+    setTodos((prev) =>
+      prev.map((prevTodo) =>
+        prevTodo.id === id
+          ? { ...prevTodo, completed: !prevTodo.completed }
+          : prevTodo
+      )
+    );
   };
 
   useEffect(() => {
-    document.querySelector("html").classList.remove("light");
-    document.querySelector("html").classList.add(themeMode);
-  }, [themeMode]);
-  return (
-    <ThemeProvider value={(themeMode, darkTheme, lightTheme)}>
-      <div className="flex flex-wrap min-h-screen items-center">
-        <div className="w-full">
-          <div className="w-full max-w-sm mx-auto flex justify-end mb-4">
-            <ThemBtn />
-          </div>
+    const todos = JSON.parse(localStorage.getItem("todos"));
 
-          <div className="w-full max-w-sm mx-auto">
-            <Card />
+    if (todos && todos.length > 0) {
+      setTodos(todos);
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("todos", JSON.stringify(todos));
+  }, [todos]);
+  return (
+    <TodoProvider
+      value={{ todos, addTodo, deleteTodo, updateTodo, toggleComplete }}
+    >
+      <div className="bg-[#172842] min-h-screen py-8">
+        <div className="w-full max-w-2xl mx-auto shadow-md rounded-lg px-4 py-3 text-white">
+          <h1 className="text-2xl font-bold text-center mb-8 mt-2">
+            Manage Your Todos
+          </h1>
+          <div className="mb-4">
+            {/* Todo form goes here */}
+            <TodoForm />
+          </div>
+          <div className="flex flex-wrap gap-y-3">
+            {/*Loop and Add TodoItem here */}
+            {
+              todos.map((todo)=>(
+                <div className="w-full" key={todo.id}>
+                   <TodoItem todo={todo}/>
+                </div>
+              ))
+            }
           </div>
         </div>
       </div>
-    </ThemeProvider>
+    </TodoProvider>
   );
 }
 
